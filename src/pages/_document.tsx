@@ -1,9 +1,10 @@
 import React from 'react';
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+import { ThemeProvider as StylesThemeProvider } from '@mui/styles';
 import createEmotionServer from '@emotion/server/create-instance';
 import createCache from '@emotion/cache';
-import muiTheme from '@/theme';
+import muiTheme, { stylesTheme } from '@/theme';
 
 const createEmotionCache = () => {
   return createCache({ key: 'css', prepend: true });
@@ -43,7 +44,9 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
     originalRenderPage({
       enhanceApp: (App) => (props) => (
         <MuiThemeProvider theme={muiTheme}>
-          <App {...props} />
+          <StylesThemeProvider theme={stylesTheme}>
+            <App {...props} />
+          </StylesThemeProvider>
         </MuiThemeProvider>
       ),
     });

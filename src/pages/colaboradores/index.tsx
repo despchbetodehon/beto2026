@@ -591,36 +591,6 @@ const Colaboradores: React.FC = () => {
 
           <TabPanel value={tabValue} index={0}>
             <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 0' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-                <Typography variant="h4" style={{ fontWeight: 'bold', color: '#1976d2' }}>
-                  👥 Gestão de Usuários ({usuariosList?.length || 0})
-                </Typography>
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <Button
-                    variant="outlined"
-                    startIcon={<Add />}
-                    onClick={() => {
-                      setIsLoading(true);
-                      carregarUsuarios().finally(() => setIsLoading(false));
-                    }}
-                    disabled={isLoading}
-                    style={{ borderRadius: 8 }}
-                  >
-                    Recarregar
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<Add />}
-                    onClick={() => setNewUserDialogOpen(true)}
-                    style={{ borderRadius: 8 }}
-                    disabled={!hasUserManagement}
-                  >
-                    Novo Usuário
-                  </Button>
-                </div>
-              </div>
-
               <Header usuariosCount={usuariosList?.length || 0} onReload={() => { setIsLoading(true); carregarUsuarios().finally(() => setIsLoading(false)); }} onNewUser={() => setNewUserDialogOpen(true)} disabledNew={!hasUserManagement} />
               <UsersList usuariosList={usuariosList} isMobile={isMobile} isLoading={isLoading} onToggleStatus={handleToggleUserStatus} onOpenMenu={handleUserMenuClick} />
 

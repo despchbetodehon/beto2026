@@ -32,9 +32,12 @@ const muiTheme = createTheme({
       fontWeight: 600,
     },
   },
+  spacing: 8,
   shape: {
     borderRadius: 4,
   },
 });
+
+export const stylesTheme = muiTheme;
 
 export default muiTheme;

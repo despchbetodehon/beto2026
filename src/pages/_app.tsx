@@ -5,6 +5,7 @@ import { GlobalStyles as MuiGlobalStyles, Box } from '@mui/material';
 import { AutenticacaoProvider } from '@/data/contexts/AutenticacaoContext';
 import { MantineProvider } from '@mantine/core';
 import { ThemeProvider as MuiThemeProvider, StyledEngineProvider } from '@mui/material/styles';
+import { ThemeProvider as StylesThemeProvider } from '@mui/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import type { AppProps } from 'next/app';
 import { AUTHORSHIP, SIGNATURE } from '@/metadata/authorship';
@@ -14,7 +15,7 @@ import MenuTopBeto from '@/components/home/home';
 
 import '@/styles/globals.css';
 
-import muiTheme from '@/theme';
+import muiTheme, { stylesTheme } from '@/theme';
 
 // Dynamic imports
 const Particles = dynamic(() => import('@/components/landing/particles'), {
@@ -119,21 +120,23 @@ function App({ Component, pageProps }: AppProps) {
 
 
   return (
-    <StyledEngineProvider injectFirst>
-      <MuiThemeProvider theme={muiTheme}>
-        <CssBaseline />
-        <MuiGlobalStyles styles={globalStyles} />
-        <MantineProvider withGlobalStyles withNormalizeCSS>
-          <AutenticacaoProvider>
+    <MantineProvider withGlobalStyles withNormalizeCSS>
+      <StyledEngineProvider injectFirst>
+        <MuiThemeProvider theme={muiTheme}>
+          <StylesThemeProvider theme={stylesTheme}>
+            <CssBaseline />
+            <MuiGlobalStyles styles={globalStyles} />
+            <AutenticacaoProvider>
 
-            <AppContent Component={Component} pageProps={pageProps} />
+              <AppContent Component={Component} pageProps={pageProps} />
 
-            {/* <ChatFlutuante /> - Temporariamente desabilitado */}
+              {/* <ChatFlutuante /> - Temporariamente desabilitado */}
 
-          </AutenticacaoProvider>
-        </MantineProvider>
-      </MuiThemeProvider>
-    </StyledEngineProvider>
+            </AutenticacaoProvider>
+          </StylesThemeProvider>
+        </MuiThemeProvider>
+      </StyledEngineProvider>
+    </MantineProvider>
   );
 }
 
