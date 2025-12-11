@@ -4,7 +4,6 @@ import {
   List, ListItem, ListItemText, Divider, Grid, Avatar, Badge, Snackbar, Dialog, Tabs, Tab, AppBar
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { createTheme, ThemeProvider } from '@mui/material';
 import { collection, getFirestore, getDocs, updateDoc, doc, onSnapshot, deleteDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '@/logic/firebase/config/app';
@@ -60,11 +59,6 @@ interface Stats {
 }
 
 // Tema personalizado
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-  },
-});
 
 const useStyles = makeStyles((theme: any) => ({
   dashboardHeader: {
@@ -603,7 +597,7 @@ const Dashboard = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    
       <div>
         <AppBar position="static" color="inherit" className={classes.noPrint}>
           <Tabs 
@@ -680,7 +674,7 @@ const Dashboard = () => {
           <DashboardTransferencia />
         </TabPanel>
       </div>
-    </ThemeProvider>
+    
   );
 };
 

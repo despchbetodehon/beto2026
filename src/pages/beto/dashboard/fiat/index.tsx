@@ -4,7 +4,6 @@ import {
   List, ListItem, ListItemText, Divider, Grid, Avatar, Badge, Tooltip, Snackbar
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { createTheme, ThemeProvider } from '@mui/material';
 import { collection, getFirestore, getDocs, updateDoc, doc, onSnapshot, deleteDoc } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { app } from '@/logic/firebase/config/app';
@@ -49,9 +48,6 @@ interface Stats {
   valorTotal: number;
 }
 
-const theme = createTheme({
-  palette: {},
-});
 
 const useStyles = makeStyles((theme: any) => ({
   dashboardHeader: {
@@ -534,7 +530,7 @@ const Dashboard = () => {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
-    <ThemeProvider theme={theme}>
+    
       <div>
         <Grid container spacing={2}>
           <Grid item xs={12} md={2} className={classes.noPrint}>
@@ -738,7 +734,7 @@ const Dashboard = () => {
           message={newDocumentMessage}
         />
       </div>
-    </ThemeProvider>
+    
   );
 };
 

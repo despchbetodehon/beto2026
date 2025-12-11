@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { makeStyles, useTheme } from '@mui/styles';
 import { useRouter } from 'next/router';
+
 import {
   Paper,
   Typography,
@@ -17,8 +17,6 @@ import {
   DialogContent,
   DialogActions,
   Snackbar,
-  Container,
-  CssBaseline,
   TextField,
   FormControl,
   InputLabel,
@@ -26,13 +24,14 @@ import {
   MenuItem,
   Switch,
   FormControlLabel,
-  Checkbox,
   IconButton,
   Menu,
-  Collapse,
   CircularProgress,
   ListItemIcon,
   ListItemText,
+  Collapse,
+  Checkbox,
+  useMediaQuery,
 } from '@mui/material';
 import {
   People,
@@ -52,145 +51,13 @@ import {
   CloudUpload,
   Share,
 } from '@mui/icons-material';
-import { Alert } from '@mui/lab';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Alert } from '@mui/material';
 import AutenticacaoContext from '@/data/contexts/AutenticacaoContext';
 import { usePermissions } from '@/hooks/usePermissions';
-import ColaboradoresHeader from '@/components/headers/ColaboradoresHeader';
-import ColaboradoresTable from '@/components/tables/ColaboradoresTable';
-
-const useStyles = makeStyles((theme: any) => ({
-  root: {
-    minHeight: '100vh',
-    background: theme.palette.type === 'dark'
-      ? 'linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #2d2d2d 100%)'
-      : 'linear-gradient(135deg, rgb(150, 150, 150) 0%, #c3cfe2 100%)',
-    transition: 'all 0.3s ease',
-    position: 'relative',
-    overflow: 'hidden',
-    [theme.breakpoints.down('xs')]: {
-      overflow: 'auto',
-    },
-  },
-  header: {
-    padding: theme.spacing(4),
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    color: 'white',
-    textAlign: 'center',
-    borderRadius: '0 0 30px 30px',
-    boxShadow: theme.shadows[10],
-    [theme.breakpoints.down('md')]: {
-      padding: theme.spacing(3),
-      borderRadius: '0 0 20px 20px',
-    },
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(2),
-      borderRadius: '0 0 15px 15px',
-    },
-    [theme.breakpoints.down('xs')]: {
-      padding: theme.spacing(1.5),
-      borderRadius: '0 0 10px 10px',
-    },
-  },
-  tabsContainer: {
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: theme.spacing(2),
-    margin: theme.spacing(2),
-    boxShadow: theme.shadows[8],
-    overflow: 'hidden',
-    [theme.breakpoints.down('md')]: {
-      margin: theme.spacing(1.5),
-      borderRadius: theme.spacing(1.5),
-    },
-    [theme.breakpoints.down('sm')]: {
-      margin: theme.spacing(1),
-      borderRadius: theme.spacing(1),
-      boxShadow: theme.shadows[4],
-    },
-    [theme.breakpoints.down('xs')]: {
-      margin: theme.spacing(0.5),
-      borderRadius: theme.spacing(0.5),
-      boxShadow: theme.shadows[2],
-    },
-  },
-  tabs: {
-    borderBottom: '1px solid #e0e0e0',
-    '& .MuiTab-root': {
-      minWidth: 120,
-      fontSize: '0.875rem',
-      padding: '12px 16px',
-      [theme.breakpoints.down('sm')]: {
-        minWidth: 80,
-        fontSize: '0.7rem',
-        padding: '8px 12px',
-      },
-    },
-  },
-  tabPanel: {
-    padding: 0,
-    minHeight: 'calc(100vh - 400px)',
-  },
-  card: {
-    borderRadius: theme.spacing(2),
-    boxShadow: theme.shadows[4],
-    background: theme.palette.background.paper,
-    transition: 'all 0.3s ease',
-    [theme.breakpoints.down('md')]: {
-      borderRadius: theme.spacing(1.5),
-      boxShadow: theme.shadows[3],
-    },
-    [theme.breakpoints.down('sm')]: {
-      borderRadius: theme.spacing(1),
-      boxShadow: theme.shadows[2],
-    },
-    [theme.breakpoints.down('xs')]: {
-      borderRadius: theme.spacing(0.8),
-      boxShadow: theme.shadows[1],
-    },
-    '&:hover': {
-      transform: 'translateY(-2px)',
-      boxShadow: theme.shadows[8],
-      [theme.breakpoints.down('sm')]: {
-        transform: 'translateY(-1px)',
-        boxShadow: theme.shadows[4],
-      },
-      [theme.breakpoints.down('xs')]: {
-        transform: 'none',
-        boxShadow: theme.shadows[2],
-      },
-    },
-  },
-  permissionChip: {
-    fontSize: '0.7rem',
-    fontWeight: 'bold',
-    color: theme.palette.getContrastText('#3f51b5'),
-    backgroundColor: '#3f51b5',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '0.65rem',
-      height: 18,
-    },
-    [theme.breakpoints.down('xs')]: {
-      fontSize: '0.6rem',
-      height: 16,
-    },
-  },
-  chipContainer: {
-    display: 'flex',
-    gap: theme.spacing(1),
-    flexWrap: 'wrap',
-    marginTop: theme.spacing(1),
-    justifyContent: 'center',
-    [theme.breakpoints.down('sm')]: {
-      gap: theme.spacing(0.5),
-      marginTop: theme.spacing(0.5),
-    },
-    [theme.breakpoints.down('xs')]: {
-      gap: theme.spacing(0.3),
-      marginTop: theme.spacing(0.3),
-      justifyContent: 'flex-start',
-    },
-  },
-}));
+import TabsWrapper from '@/components/colaboradores/TabsWrapper';
+import Header from '@/components/colaboradores/Header';
+import UsersList from '@/components/colaboradores/UsersList';
+import ProfilesGrid from '@/components/colaboradores/ProfilesGrid';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -200,7 +67,6 @@ interface TabPanelProps {
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
-  const classes = useStyles();
 
   return (
     <div
@@ -208,36 +74,24 @@ function TabPanel(props: TabPanelProps) {
       hidden={value !== index}
       id={`tabpanel-${index}`}
       aria-labelledby={`tab-${index}`}
-      className={classes.tabPanel}
+      style={{
+        padding: 0,
+        minHeight: 'calc(100vh - 400px)',
+      }}
       {...other}
     >
       {value === index && (
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 30, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -30, scale: 0.95 }}
-            transition={{
-              duration: 0.4,
-              type: "spring",
-              stiffness: 300,
-              damping: 30,
-            }}
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
+        <div>
+          {children}
+        </div>
       )}
     </div>
   );
 }
 
 const Colaboradores: React.FC = () => {
-  const classes = useStyles();
-  const theme = useTheme() as any;
   const router = useRouter();
-  const isMobile = theme.breakpoints.down('sm');
+  const isMobile = useMediaQuery('(max-width:600px)');
   const [tabValue, setTabValue] = useState(0);
   const { usuario, estaAutenticado, carregando } = useContext(AutenticacaoContext);
   const [isLoading, setIsLoading] = useState(false);
@@ -404,7 +258,7 @@ const Colaboradores: React.FC = () => {
     carregarUsuarios().finally(() => setIsLoading(false));
   }, []);
 
-  const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
@@ -718,47 +572,25 @@ const Colaboradores: React.FC = () => {
   }
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      {usuario && <ColaboradoresHeader usuario={usuario} hasColaboradorAccess={hasColaboradorAccess} classes={classes} />}
-
-      <Container maxWidth="xl">
-        <Paper className={classes.tabsContainer}>
-          <Tabs
-            value={tabValue}
-            onChange={handleTabChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            className={classes.tabs}
-          >
-            <Tab
-              label={
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <People style={{ marginRight: 8 }} />
-                  Usuários
-                </div>
-              }
-            />
-            <Tab
-              label={
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Security style={{ marginRight: 8 }} />
-                  Permissões
-                </div>
-              }
-            />
-            <Tab
-              label={
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Assignment style={{ marginRight: 8 }} />
-                  Dashboard Documentos
-                </div>
-              }
-            />
-          </Tabs>
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, rgb(150, 150, 150) 0%, #c3cfe2 100%)',
+      transition: 'all 0.3s ease',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px' }}>
+        <Paper sx={{
+          backgroundColor: 'background.paper',
+          borderRadius: 2,
+          margin: 2,
+          boxShadow: 8,
+          overflow: 'hidden',
+        }}>
+          <TabsWrapper tabValue={tabValue} handleTabChange={handleTabChange} />
 
           <TabPanel value={tabValue} index={0}>
-            <Container maxWidth="lg" style={{ padding: '24px 0' }}>
+            <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 0' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
                 <Typography variant="h4" style={{ fontWeight: 'bold', color: '#1976d2' }}>
                   👥 Gestão de Usuários ({usuariosList?.length || 0})
@@ -789,160 +621,8 @@ const Colaboradores: React.FC = () => {
                 </div>
               </div>
 
-              {/* Lista de usuários usando divs ao invés de Table para evitar problemas com tema MUI */}
-              <Paper style={{
-                borderRadius: isMobile ? 8 : 12,
-                boxShadow: isMobile ? '0 2px 8px rgba(0,0,0,0.1)' : '0 4px 16px rgba(0,0,0,0.1)',
-                overflow: 'hidden',
-              }}>
-                {/* Header */}
-                <div style={{
-                  backgroundColor: '#f5f5f5',
-                  padding: '16px',
-                  borderBottom: '1px solid #e0e0e0',
-                  display: 'flex',
-                  fontWeight: 'bold',
-                  fontSize: '0.875rem'
-                }}>
-                  <div style={{ flex: isMobile ? 2 : 1, minWidth: isMobile ? 120 : 150 }}>Usuário</div>
-                  {!isMobile && <div style={{ flex: 1 }}>Email</div>}
-                  <div style={{ flex: 1 }}>Permissão</div>
-                  <div style={{ flex: 1 }}>Status</div>
-                  <div style={{ flex: 0.5, minWidth: 80 }}>Ações</div>
-                </div>
-
-                {/* Body */}
-                <div>
-                  {usuariosList && usuariosList.length > 0 ? (
-                    usuariosList.map((usuario, index) => (
-                      <div
-                        key={usuario.id || usuario.email || index}
-                        style={{
-                          padding: '16px',
-                          borderBottom: index < usuariosList.length - 1 ? '1px solid #e0e0e0' : 'none',
-                          display: 'flex',
-                          alignItems: 'center',
-                          backgroundColor: (usuario as any).temSenhaTextoPlano ? '#fff3cd' : 'white',
-                          transition: 'background-color 0.2s',
-                        }}
-                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
-                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = (usuario as any).temSenhaTextoPlano ? '#fff3cd' : 'white'}
-                      >
-                        <div style={{ flex: isMobile ? 2 : 1, minWidth: isMobile ? 120 : 150, display: 'flex', alignItems: 'center' }}>
-                          <Avatar
-                            src={usuario.imagemUrl || '/betologo.jpeg'}
-                            style={{
-                              width: isMobile ? 32 : 40,
-                              height: isMobile ? 32 : 40,
-                              marginRight: isMobile ? 8 : 12,
-                              border: (usuario as any).temSenhaTextoPlano ? '2px solid #ff9800' : undefined
-                            }}
-                          >
-                            {usuario.nome?.charAt(0)?.toUpperCase() || usuario.email?.charAt(0)?.toUpperCase() || '?'}
-                          </Avatar>
-                          <div>
-                            <Typography
-                              variant="body1"
-                              style={{
-                                fontWeight: 'bold',
-                                fontSize: isMobile ? '0.8rem' : undefined,
-                              }}
-                            >
-                              {usuario.nome || usuario.email || 'Nome não informado'}
-                            </Typography>
-                            {isMobile && (
-                              <Typography variant="caption" color="textSecondary" style={{ fontSize: '0.7rem' }}>
-                                {usuario.email}
-                              </Typography>
-                            )}
-                            <Typography
-                              variant="caption"
-                              color="textSecondary"
-                              style={{ fontSize: isMobile ? '0.65rem' : undefined }}
-                            >
-                              ID: {usuario.id || usuario.email || 'N/A'}
-                            </Typography>
-                          </div>
-                        </div>
-                        {!isMobile && (
-                          <div style={{ flex: 1 }}>
-                            <Typography variant="body2" style={{ fontSize: isMobile ? '0.75rem' : undefined }}>
-                              {usuario.email || 'Email não informado'}
-                            </Typography>
-                          </div>
-                        )}
-                        <div style={{ flex: 1 }}>
-                          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' }}>
-                            <Chip
-                              label={usuario.permissao || 'Visualizador'}
-                              color={usuario.permissao === 'Administrador' ? 'secondary' : 'default'}
-                              size="small"
-                              style={{
-                                fontSize: isMobile ? '0.65rem' : undefined,
-                                height: isMobile ? 20 : undefined,
-                              }}
-                            />
-                            {(usuario as any).temSenhaTextoPlano && (
-                              <Chip
-                                label="⚠️ Senha insegura"
-                                size="small"
-                                style={{
-                                  backgroundColor: '#ff9800',
-                                  color: 'white',
-                                  fontSize: isMobile ? '0.6rem' : '0.65rem',
-                                  height: isMobile ? 18 : 20,
-                                }}
-                              />
-                            )}
-                            {(usuario as any).temSenhaSegura && (
-                              <Chip
-                                label="🔒 Seguro"
-                                size="small"
-                                style={{
-                                  backgroundColor: '#4caf50',
-                                  color: 'white',
-                                  fontSize: isMobile ? '0.6rem' : '0.65rem',
-                                  height: isMobile ? 18 : 20,
-                                }}
-                              />
-                            )}
-                          </div>
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <FormControlLabel
-                            control={
-                              <Switch
-                                checked={usuario.ativo !== false}
-                                onChange={() => handleToggleUserStatus(usuario)}
-                                color="primary"
-                                size="small"
-                              />
-                            }
-                            label={usuario.ativo !== false ? 'Ativo' : 'Inativo'}
-                          />
-                        </div>
-                        <div style={{ flex: 0.5, minWidth: 80 }}>
-                          <IconButton
-                            onClick={(e) => handleUserMenuClick(e, usuario)}
-                            size="small"
-                          >
-                            <MoreVert />
-                          </IconButton>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div style={{ textAlign: 'center', padding: '48px' }}>
-                      <Typography variant="h6" color="textSecondary">
-                        {isLoading ? 'Carregando usuários...' : 'Nenhum usuário encontrado'}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary" style={{ marginTop: 8 }}>
-                        {!isLoading && 'Adicione o primeiro usuário clicando no botão "Novo Usuário"'}
-                      </Typography>
-                    </div>
-                  )}
-                </div>
-              </Paper>
+              <Header usuariosCount={usuariosList?.length || 0} onReload={() => { setIsLoading(true); carregarUsuarios().finally(() => setIsLoading(false)); }} onNewUser={() => setNewUserDialogOpen(true)} disabledNew={!hasUserManagement} />
+              <UsersList usuariosList={usuariosList} isMobile={isMobile} isLoading={isLoading} onToggleStatus={handleToggleUserStatus} onOpenMenu={handleUserMenuClick} />
 
               <Menu
                 anchorEl={userMenuAnchor}
@@ -958,58 +638,22 @@ const Colaboradores: React.FC = () => {
                   <ListItemText>Excluir</ListItemText>
                 </MenuItem>
               </Menu>
-            </Container>
+            </div>
           </TabPanel>
 
           <TabPanel value={tabValue} index={1}>
-            <Container maxWidth="lg" style={{ padding: '24px 0' }}>
+            <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 0' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-                <Typography variant="h4" style={{ fontWeight: 'bold', color: '#1976d2' }}>
-                  🔐 Sistema de Permissões
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  startIcon={<Add />}
-                  onClick={() => setNewProfileDialogOpen(true)}
-                  style={{ borderRadius: 8 }}
-                  disabled={!hasPermissionManagement}
-                >
-                  Novo Perfil
-                </Button>
+                <Typography variant="h4" style={{ fontWeight: 'bold', color: '#1976d2' }}>🔐 Sistema de Permissões</Typography>
+                <Button variant="contained" color="primary" startIcon={<Add />} onClick={() => setNewProfileDialogOpen(true)} style={{ borderRadius: 8 }} disabled={!hasPermissionManagement}>Novo Perfil</Button>
               </div>
 
-              <Grid container spacing={isMobile ? 2 : 3}>
-                {accessProfiles.map((profile) => (
-                  <Grid item xs={12} sm={6} md={6} lg={4} key={profile.id}>
-                    <Card className={classes.card} style={{ height: '100%' }}>
-                      <CardContent>
-                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
-                          {profile.icon}
-                          <Typography variant="h6" style={{ marginLeft: 8, fontWeight: 'bold' }}>
-                            {profile.nome}
-                          </Typography>
-                        </div>
-                        <Typography variant="body2" color="textSecondary" style={{ marginBottom: 16 }}>
-                          {profile.descricao}
-                        </Typography>
-                        <div style={{ marginBottom: 16 }}>
-                          <Chip
-                            label={`${profile.usuarios} usuários`}
-                            size="small"
-                            style={{ backgroundColor: profile.color, color: 'white' }}
-                          />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            </Container>
+              <ProfilesGrid profiles={accessProfiles as any} />
+            </div>
           </TabPanel>
 
           <TabPanel value={tabValue} index={2}>
-            <Container maxWidth="lg" style={{ padding: '24px 0' }}>
+            <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 0' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
                 <Typography variant="h4" style={{ fontWeight: 'bold', color: '#1976d2' }}>
                   📊 Dashboard Documentos
@@ -1027,7 +671,16 @@ const Colaboradores: React.FC = () => {
               <Grid container spacing={isMobile ? 2 : 3}>
                 {dashboardsData.map((dashboard) => (
                   <Grid item xs={12} sm={6} md={6} lg={6} key={dashboard.id}>
-                    <Card className={classes.card}>
+                    <Card sx={{
+                      borderRadius: 2,
+                      boxShadow: 4,
+                      background: 'background.paper',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-2px)',
+                        boxShadow: 8,
+                      },
+                    }}>
                       <CardContent>
                         <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
                           {dashboard.icon}
@@ -1035,7 +688,7 @@ const Colaboradores: React.FC = () => {
                             <Typography variant="h6" style={{ fontWeight: 'bold' }}>
                               {dashboard.nome}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography variant="body2" color="text.secondary">
                               {dashboard.descricao}
                             </Typography>
                             <Typography variant="caption" style={{ color: dashboard.color }}>
@@ -1074,10 +727,10 @@ const Colaboradores: React.FC = () => {
                   </Grid>
                 ))}
               </Grid>
-            </Container>
+            </div>
           </TabPanel>
         </Paper>
-      </Container>
+      </div>
 
       <Dialog
         open={newUserDialogOpen}
@@ -1097,7 +750,7 @@ const Colaboradores: React.FC = () => {
             <Add style={{ marginRight: 8 }} />
             Adicionar Novo Usuário
           </Typography>
-          <Typography variant="body2" color="textSecondary" style={{ marginTop: 8 }}>
+          <Typography variant="body2" color="text.secondary" style={{ marginTop: 8 }}>
             🔒 Senha será armazenada com salt aleatório e hash SHA-256 para máxima segurança
           </Typography>
         </DialogTitle>

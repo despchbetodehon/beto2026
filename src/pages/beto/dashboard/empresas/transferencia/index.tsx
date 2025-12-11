@@ -6,7 +6,6 @@ import {
   List, ListItem, ListItemText, Divider, Grid, Avatar, Badge, Snackbar, Dialog
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { createTheme, ThemeProvider } from '@mui/material';
 import { collection, getFirestore, getDocs, updateDoc, doc, onSnapshot, deleteDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '@/logic/firebase/config/app';
@@ -54,11 +53,6 @@ interface Stats {
 }
 
 // Tema personalizado
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-  },
-});
 
 const useStyles = makeStyles((theme: any) => ({
   dashboardHeader: {
@@ -242,7 +236,7 @@ const DashboardTransferencia = () => {
   }, [searchText, documents]);
 
   return (
-    <ThemeProvider theme={theme}>
+    
       <div>
         <Typography variant="h4" style={{ marginBottom: 20, textAlign: 'center', color: '#2d5a3d' }}>
           <TransferWithinAStation style={{ marginRight: 8, verticalAlign: 'middle' }} />
@@ -371,7 +365,7 @@ const DashboardTransferencia = () => {
           </Grid>
         </Grid>
       </div>
-    </ThemeProvider>
+    
   );
 };
 

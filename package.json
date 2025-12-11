@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 5001 -H 0.0.0.0",
+    "dev": "next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start -p 5001 -H 0.0.0.0",
     "lint": "next lint",
@@ -21,7 +21,7 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.137",
     "@mui/material": "^5.13.8",
-    "@mui/styles": "^5.13.7",
+    "@mui/styles": "^5.18.0",
     "@next/bundle-analyzer": "^16.0.7",
     "@tabler/icons-react": "^2.9.0",
     "@types/d3": "^7.4.3",

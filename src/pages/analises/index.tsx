@@ -5,7 +5,6 @@ import {
   Divider, LinearProgress, Tabs, Tab, Button, Card
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { createTheme, ThemeProvider } from '@mui/material';
 import { collection, getFirestore, getDocs } from 'firebase/firestore';
 import { app } from '@/logic/firebase/config/app';
 import {
@@ -54,14 +53,6 @@ ChartJS.register(
 );
 
 const db = getFirestore(app);
-
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-    primary: { main: '#1a4d3a' },
-    secondary: { main: '#4caf50' },
-  },
-});
 
 const useStyles = makeStyles({
   root: {
@@ -2426,8 +2417,7 @@ Seja PRÁTICO, DIRETO e ACIONÁVEL.`;
   const receitaPorProdutos = calcularReceitaPorProdutos();
 
   return (
-    <ThemeProvider theme={theme}>
-      <div className={classes.root}>
+    <div className={classes.root}>
         <FiltersSection
           periodoAnalise={periodoAnalise}
           setPeriodoAnalise={setPeriodoAnalise}
@@ -2600,7 +2590,7 @@ Seja PRÁTICO, DIRETO e ACIONÁVEL.`;
           </>
         )}
       </div>
-    </ThemeProvider>
+    </div>
   );
 };
 

@@ -8,7 +8,6 @@ import {
   DialogTitle, DialogContent, DialogContentText, DialogActions
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { createTheme, ThemeProvider } from '@mui/material';
 import { collection, getFirestore, getDocs, updateDoc, doc, onSnapshot, deleteDoc } from 'firebase/firestore';
 import { app } from '@/logic/firebase/config/app';
 import {
@@ -71,26 +70,6 @@ interface Item {
   produtosSelecionados?: string[];
 }
 
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#1a4d3a',
-    },
-    secondary: {
-      main: '#2d5a3d',
-    },
-  },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 960,
-      lg: 1280,
-      xl: 1920,
-    },
-  },
-});
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -1232,7 +1211,7 @@ filtered = filtered.filter(doc =>
 
   return (
     <Forcaautenticacao>
-    <ThemeProvider theme={theme}>
+    
       <div className={classes.root}>
         <Container maxWidth="xl">
           <DashboardHeader 
@@ -1523,7 +1502,7 @@ startIcon={(expanded === (doc.docUuid ?? doc.id)) ? <ExpandLess /> : <ExpandMore
           />
         </Container>
       </div>
-    </ThemeProvider>
+    
     </Forcaautenticacao>
   );
 };

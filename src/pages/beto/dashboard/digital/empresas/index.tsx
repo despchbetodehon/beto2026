@@ -5,7 +5,6 @@ import {
   List, ListItem, ListItemText, Divider, Grid, Avatar, Badge, Snackbar, Dialog
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { createTheme, ThemeProvider } from '@mui/material';
 import { collection, getFirestore, getDocs, updateDoc, doc, onSnapshot, deleteDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '@/logic/firebase/config/app';
@@ -54,11 +53,6 @@ interface Stats {
 }
 
 // Tema personalizado
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-  },
-});
 
 const useStyles = makeStyles((theme: any) => ({
   dashboardHeader: {
@@ -587,7 +581,7 @@ const Dashboard = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    
       <div>
         <Grid container spacing={2}>
           <Grid item xs={12} md={2} className={classes.noPrint}>
@@ -804,7 +798,7 @@ const Dashboard = () => {
           message={newDocumentMessage}
         />
       </div>
-    </ThemeProvider>
+    
   );
 };
 
