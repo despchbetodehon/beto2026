@@ -44,7 +44,7 @@ const muiTheme = createTheme({
   typography: {
     fontFamily: '"Playfair Display", "Crimson Text", "Libre Baskerville", "Georgia", serif',
   },
-  spacing: (factor: number) => `${8 * factor}px`, // MUI default spacing: 8px base unit
+  spacing: (factor: number) => `${factor * 8}px`, // Properly typed spacing function
   shape: {
     borderRadius: 4,
   },
@@ -227,25 +227,21 @@ function App({ Component, pageProps }: AppProps) {
 
 
   return (
-    <StyledEngineProvider injectFirst>
-      <MuiThemeProvider theme={muiTheme}>
-        <StylesThemeProvider theme={muiTheme}>
-          <CssBaseline />
-          <StyledThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-            <GlobalStyles />
-            <MantineProvider withGlobalStyles withNormalizeCSS>
-              <AutenticacaoProvider>
+    <MuiThemeProvider theme={muiTheme}>
+      <CssBaseline />
+      <StyledThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
+        <GlobalStyles />
+        <MantineProvider withGlobalStyles withNormalizeCSS>
+          <AutenticacaoProvider>
 
-                <AppContent Component={Component} pageProps={pageProps} />
+            <AppContent Component={Component} pageProps={pageProps} />
 
-                {/* <ChatFlutuante /> - Temporariamente desabilitado */}
+            {/* <ChatFlutuante /> - Temporariamente desabilitado */}
 
-              </AutenticacaoProvider>
-            </MantineProvider>
-          </StyledThemeProvider>
-        </StylesThemeProvider>
-      </MuiThemeProvider>
-    </StyledEngineProvider>
+          </AutenticacaoProvider>
+        </MantineProvider>
+      </StyledThemeProvider>
+    </MuiThemeProvider>
   );
 }
 

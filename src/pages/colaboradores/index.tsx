@@ -19,12 +19,6 @@ import {
   Snackbar,
   Container,
   CssBaseline,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
   FormControl,
   InputLabel,
@@ -795,154 +789,160 @@ const Colaboradores: React.FC = () => {
                 </div>
               </div>
 
-              <TableContainer
-                component={Paper}
-                style={{
-                  borderRadius: isMobile ? 8 : 12,
-                  boxShadow: isMobile ? '0 2px 8px rgba(0,0,0,0.1)' : '0 4px 16px rgba(0,0,0,0.1)',
-                  overflowX: 'auto',
-                }}
-              >
-                <Table size={isMobile ? 'small' : 'medium'}>
-                  <TableHead style={{ backgroundColor: '#f5f5f5' }}>
-                    <TableRow>
-                      <TableCell style={{ minWidth: isMobile ? 120 : 150 }}><strong>Usuário</strong></TableCell>
-                      {!isMobile && <TableCell><strong>Email</strong></TableCell>}
-                      <TableCell><strong>Permissão</strong></TableCell>
-                      <TableCell><strong>Status</strong></TableCell>
-                      <TableCell style={{ minWidth: 80 }}><strong>Ações</strong></TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {usuariosList && usuariosList.length > 0 ? (
-                      usuariosList.map((usuario, index) => (
-                        <TableRow 
-                          key={usuario.id || usuario.email || index} 
-                          hover
-                          style={{
-                            backgroundColor: (usuario as any).temSenhaTextoPlano ? '#fff3cd' : undefined
-                          }}
-                        >
-                          <TableCell>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                              <Avatar
-                                src={usuario.imagemUrl || '/betologo.jpeg'}
-                                style={{
-                                  width: isMobile ? 32 : 40,
-                                  height: isMobile ? 32 : 40,
-                                  marginRight: isMobile ? 8 : 12,
-                                  border: (usuario as any).temSenhaTextoPlano ? '2px solid #ff9800' : undefined
-                                }}
-                              >
-                                {usuario.nome?.charAt(0)?.toUpperCase() || usuario.email?.charAt(0)?.toUpperCase() || '?'}
-                              </Avatar>
-                              <div>
-                                <Typography
-                                  variant="body1"
-                                  style={{
-                                    fontWeight: 'bold',
-                                    fontSize: isMobile ? '0.8rem' : undefined,
-                                  }}
-                                >
-                                  {usuario.nome || usuario.email || 'Nome não informado'}
-                                </Typography>
-                                {isMobile && (
-                                  <Typography variant="caption" color="textSecondary" style={{ fontSize: '0.7rem' }}>
-                                    {usuario.email}
-                                  </Typography>
-                                )}
-                                <Typography
-                                  variant="caption"
-                                  color="textSecondary"
-                                  style={{ fontSize: isMobile ? '0.65rem' : undefined }}
-                                >
-                                  ID: {usuario.id || usuario.email || 'N/A'}
-                                </Typography>
-                              </div>
-                            </div>
-                          </TableCell>
-                          {!isMobile && (
-                            <TableCell>
-                              <Typography variant="body2" style={{ fontSize: isMobile ? '0.75rem' : undefined }}>
-                                {usuario.email || 'Email não informado'}
+              {/* Lista de usuários usando divs ao invés de Table para evitar problemas com tema MUI */}
+              <Paper style={{
+                borderRadius: isMobile ? 8 : 12,
+                boxShadow: isMobile ? '0 2px 8px rgba(0,0,0,0.1)' : '0 4px 16px rgba(0,0,0,0.1)',
+                overflow: 'hidden',
+              }}>
+                {/* Header */}
+                <div style={{
+                  backgroundColor: '#f5f5f5',
+                  padding: '16px',
+                  borderBottom: '1px solid #e0e0e0',
+                  display: 'flex',
+                  fontWeight: 'bold',
+                  fontSize: '0.875rem'
+                }}>
+                  <div style={{ flex: isMobile ? 2 : 1, minWidth: isMobile ? 120 : 150 }}>Usuário</div>
+                  {!isMobile && <div style={{ flex: 1 }}>Email</div>}
+                  <div style={{ flex: 1 }}>Permissão</div>
+                  <div style={{ flex: 1 }}>Status</div>
+                  <div style={{ flex: 0.5, minWidth: 80 }}>Ações</div>
+                </div>
+
+                {/* Body */}
+                <div>
+                  {usuariosList && usuariosList.length > 0 ? (
+                    usuariosList.map((usuario, index) => (
+                      <div
+                        key={usuario.id || usuario.email || index}
+                        style={{
+                          padding: '16px',
+                          borderBottom: index < usuariosList.length - 1 ? '1px solid #e0e0e0' : 'none',
+                          display: 'flex',
+                          alignItems: 'center',
+                          backgroundColor: (usuario as any).temSenhaTextoPlano ? '#fff3cd' : 'white',
+                          transition: 'background-color 0.2s',
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = (usuario as any).temSenhaTextoPlano ? '#fff3cd' : 'white'}
+                      >
+                        <div style={{ flex: isMobile ? 2 : 1, minWidth: isMobile ? 120 : 150, display: 'flex', alignItems: 'center' }}>
+                          <Avatar
+                            src={usuario.imagemUrl || '/betologo.jpeg'}
+                            style={{
+                              width: isMobile ? 32 : 40,
+                              height: isMobile ? 32 : 40,
+                              marginRight: isMobile ? 8 : 12,
+                              border: (usuario as any).temSenhaTextoPlano ? '2px solid #ff9800' : undefined
+                            }}
+                          >
+                            {usuario.nome?.charAt(0)?.toUpperCase() || usuario.email?.charAt(0)?.toUpperCase() || '?'}
+                          </Avatar>
+                          <div>
+                            <Typography
+                              variant="body1"
+                              style={{
+                                fontWeight: 'bold',
+                                fontSize: isMobile ? '0.8rem' : undefined,
+                              }}
+                            >
+                              {usuario.nome || usuario.email || 'Nome não informado'}
+                            </Typography>
+                            {isMobile && (
+                              <Typography variant="caption" color="textSecondary" style={{ fontSize: '0.7rem' }}>
+                                {usuario.email}
                               </Typography>
-                            </TableCell>
-                          )}
-                          <TableCell>
-                            <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' }}>
+                            )}
+                            <Typography
+                              variant="caption"
+                              color="textSecondary"
+                              style={{ fontSize: isMobile ? '0.65rem' : undefined }}
+                            >
+                              ID: {usuario.id || usuario.email || 'N/A'}
+                            </Typography>
+                          </div>
+                        </div>
+                        {!isMobile && (
+                          <div style={{ flex: 1 }}>
+                            <Typography variant="body2" style={{ fontSize: isMobile ? '0.75rem' : undefined }}>
+                              {usuario.email || 'Email não informado'}
+                            </Typography>
+                          </div>
+                        )}
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' }}>
+                            <Chip
+                              label={usuario.permissao || 'Visualizador'}
+                              color={usuario.permissao === 'Administrador' ? 'secondary' : 'default'}
+                              size="small"
+                              style={{
+                                fontSize: isMobile ? '0.65rem' : undefined,
+                                height: isMobile ? 20 : undefined,
+                              }}
+                            />
+                            {(usuario as any).temSenhaTextoPlano && (
                               <Chip
-                                label={usuario.permissao || 'Visualizador'}
-                                color={usuario.permissao === 'Administrador' ? 'secondary' : 'default'}
+                                label="⚠️ Senha insegura"
                                 size="small"
                                 style={{
-                                  fontSize: isMobile ? '0.65rem' : undefined,
-                                  height: isMobile ? 20 : undefined,
+                                  backgroundColor: '#ff9800',
+                                  color: 'white',
+                                  fontSize: isMobile ? '0.6rem' : '0.65rem',
+                                  height: isMobile ? 18 : 20,
                                 }}
                               />
-                              {(usuario as any).temSenhaTextoPlano && (
-                                <Chip
-                                  label="⚠️ Senha insegura"
-                                  size="small"
-                                  style={{
-                                    backgroundColor: '#ff9800',
-                                    color: 'white',
-                                    fontSize: isMobile ? '0.6rem' : '0.65rem',
-                                    height: isMobile ? 18 : 20,
-                                  }}
-                                />
-                              )}
-                              {(usuario as any).temSenhaSegura && (
-                                <Chip
-                                  label="🔒 Seguro"
-                                  size="small"
-                                  style={{
-                                    backgroundColor: '#4caf50',
-                                    color: 'white',
-                                    fontSize: isMobile ? '0.6rem' : '0.65rem',
-                                    height: isMobile ? 18 : 20,
-                                  }}
-                                />
-                              )}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <FormControlLabel
-                              control={
-                                <Switch
-                                  checked={usuario.ativo !== false}
-                                  onChange={() => handleToggleUserStatus(usuario)}
-                                  color="primary"
-                                  size="small"
-                                />
-                              }
-                              label={usuario.ativo !== false ? 'Ativo' : 'Inativo'}
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <IconButton
-                              onClick={(e) => handleUserMenuClick(e, usuario)}
-                              size="small"
-                            >
-                              <MoreVert />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={5} style={{ textAlign: 'center', padding: '48px' }}>
-                          <Typography variant="h6" color="textSecondary">
-                            {isLoading ? 'Carregando usuários...' : 'Nenhum usuário encontrado'}
-                          </Typography>
-                          <Typography variant="body2" color="textSecondary" style={{ marginTop: 8 }}>
-                            {!isLoading && 'Adicione o primeiro usuário clicando no botão "Novo Usuário"'}
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                            )}
+                            {(usuario as any).temSenhaSegura && (
+                              <Chip
+                                label="🔒 Seguro"
+                                size="small"
+                                style={{
+                                  backgroundColor: '#4caf50',
+                                  color: 'white',
+                                  fontSize: isMobile ? '0.6rem' : '0.65rem',
+                                  height: isMobile ? 18 : 20,
+                                }}
+                              />
+                            )}
+                          </div>
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <FormControlLabel
+                            control={
+                              <Switch
+                                checked={usuario.ativo !== false}
+                                onChange={() => handleToggleUserStatus(usuario)}
+                                color="primary"
+                                size="small"
+                              />
+                            }
+                            label={usuario.ativo !== false ? 'Ativo' : 'Inativo'}
+                          />
+                        </div>
+                        <div style={{ flex: 0.5, minWidth: 80 }}>
+                          <IconButton
+                            onClick={(e) => handleUserMenuClick(e, usuario)}
+                            size="small"
+                          >
+                            <MoreVert />
+                          </IconButton>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div style={{ textAlign: 'center', padding: '48px' }}>
+                      <Typography variant="h6" color="textSecondary">
+                        {isLoading ? 'Carregando usuários...' : 'Nenhum usuário encontrado'}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" style={{ marginTop: 8 }}>
+                        {!isLoading && 'Adicione o primeiro usuário clicando no botão "Novo Usuário"'}
+                      </Typography>
+                    </div>
+                  )}
+                </div>
+              </Paper>
 
               <Menu
                 anchorEl={userMenuAnchor}
