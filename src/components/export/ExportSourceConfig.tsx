@@ -95,7 +95,7 @@ const ExportSourceConfig = memo(({
                   label="Private Key *"
                   value={sourceCredentials.privateKey}
                   onChange={(e) => onSourceCredentialsChange({ ...sourceCredentials, privateKey: e.target.value })}
-                  placeholder="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
+                  placeholder="Cole a private key aqui (ou use o arquivo JSON de service account). Não compartilhe chaves em repositório."
                 />
               </Grid>
               <Grid item xs={12}>

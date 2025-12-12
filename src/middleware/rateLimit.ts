@@ -13,7 +13,8 @@ const WINDOW_MS = 60000; // 1 minuto
 const MAX_REQUESTS = 100; // 100 requisições por minuto
 
 export function rateLimit(req: NextRequest): boolean {
-  const ip = req.headers.get('x-forwarded-for') || req.ip || 'unknown';
+  const ipHeader = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip');
+  const ip = ipHeader ? ipHeader.split(',')[0].trim() : 'unknown';
   const now = Date.now();
   
   if (!store[ip] || now > store[ip].resetTime) {

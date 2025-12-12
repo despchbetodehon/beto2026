@@ -924,8 +924,7 @@ const AnaliseDados = () => {
 
   const gerarInsightsComIA = async (docs: DocumentoAnalise[]) => {
     try {
-      const geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-      if (!geminiKey) return;
+      // Use server endpoint /api/gemini to avoid client-side exposure of API keys
 
       const dadosParaIA = {
         totalDocumentos: docs.length,
@@ -946,7 +945,7 @@ Retorne APENAS:
   }
 ]`;
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${geminiKey}`, {
+      const response = await fetch('/api/gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -970,8 +969,7 @@ Retorne APENAS:
 
   const gerarEstrategiaMarketing = async (cidade: string): Promise<string> => {
     try {
-      const geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-      if (!geminiKey) return 'Chave API não configurada';
+      // Use server endpoint /api/gemini to avoid client-side exposure of API keys
 
       const cidadeData = topCidades.find(c => c.cidade === cidade);
       if (!cidadeData) return 'Dados não encontrados';
@@ -993,7 +991,7 @@ Gere uma estratégia de marketing COMPLETA e PRÁTICA com:
 
 Seja DIRETO, PRÁTICO e ACIONÁVEL. Foco em RESULTADOS IMEDIATOS.`;
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${geminiKey}`, {
+      const response = await fetch('/api/gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1029,11 +1027,7 @@ Seja DIRETO, PRÁTICO e ACIONÁVEL. Foco em RESULTADOS IMEDIATOS.`;
     try {
       setLoading(true);
 
-      const geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-      if (!geminiKey) {
-        alert('API Key da Gemini não configurada');
-        return;
-      }
+      // We'll call the server endpoint `api/gemini` which uses the server-side API key.
 
       const cidadesEstrategicas = ['Criciúma', 'Tubarão', 'Jaguaruna', '13 de Maio'];
       
@@ -1222,7 +1216,7 @@ Crie 3 campanhas específicas por cidade com:
 Seja ESPECÍFICO, PRÁTICO e ACIONÁVEL. Use dados reais e recomendações que possam ser implementadas IMEDIATAMENTE.`;
 
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${geminiKey}`,
+        '/api/gemini',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1516,11 +1510,7 @@ Seja ESPECÍFICO, PRÁTICO e ACIONÁVEL. Use dados reais e recomendações que p
     try {
       setLoading(true);
 
-      const geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-      if (!geminiKey) {
-        alert('API Key da Gemini não configurada');
-        return;
-      }
+      // We'll call the server endpoint `api/gemini` which uses the server-side API key.
 
       // Preparar dados para análise
       const dadosAnalise = {
@@ -1553,7 +1543,7 @@ Formato: Use Markdown profissional com títulos, subtítulos, listas e ênfases.
 Seja PRÁTICO, DIRETO e ACIONÁVEL.`;
 
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${geminiKey}`,
+        '/api/gemini',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -2418,15 +2408,6 @@ Seja PRÁTICO, DIRETO e ACIONÁVEL.`;
 
   return (
     <div className={classes.root}>
-        <FiltersSection
-          periodoAnalise={periodoAnalise}
-          setPeriodoAnalise={setPeriodoAnalise}
-          gerarRelatorioCompleto={gerarRelatorioCompleto}
-          gerarAnaliseCidadesEstrategicas={gerarAnaliseCidadesEstrategicas}
-          loading={loading}
-          documentosPeriodoLength={documentosPeriodo.length}
-          classes={classes}
-        />
 
         {loading ? (
           <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
@@ -2549,7 +2530,7 @@ Seja PRÁTICO, DIRETO e ACIONÁVEL.`;
                       return (
                         <React.Fragment key={cidade.cidade}>
                           <ListItem className={classes.topItem}>
-                            <Box display="flex" alignItems="center" style={{gap:1}} flex={1}>
+                            <Box display="flex" alignItems="center" style={{gap: '8px'}} flex={1}>
                               <Avatar style={{ background: '#1a4d3a', width: 36, height: 36 }}>
                                 {index + 1}
                               </Avatar>
@@ -2590,7 +2571,7 @@ Seja PRÁTICO, DIRETO e ACIONÁVEL.`;
           </>
         )}
       </div>
-    </div>
+   
   );
 };
 

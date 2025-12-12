@@ -144,7 +144,7 @@ const ExportDestination = memo(({
                   label="Private Key *"
                   value={targetCredentials.privateKey}
                   onChange={(e) => onTargetCredentialsChange({ ...targetCredentials, privateKey: e.target.value })}
-                  placeholder="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
+                  placeholder="Cole a private key aqui (ou use o arquivo JSON de service account). Não compartilhe chaves em repositório."
                 />
               </Grid>
             </>

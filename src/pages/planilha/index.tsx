@@ -20,7 +20,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions
-} from '@material-ui/core';
+} from '@mui/material';
 import { 
   CloudUpload, 
   Delete, 
@@ -31,13 +31,14 @@ import {
   Print,
   Share,
   CloudDone
-} from '@material-ui/icons';
-import { Alert } from '@material-ui/lab';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@mui/icons-material';
+import { Alert } from '@mui/lab';
+import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material/styles';
 import Pagina from '@/components/template/Pagina';
 import * as XLSX from 'xlsx';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   container: {
     padding: theme.spacing(4),
     maxWidth: 1400,
@@ -194,11 +195,7 @@ export default function PlanilhaOCR() {
       for (const file of files) {
         console.log('Processando arquivo:', file.name);
         const base64 = await fileToBase64(file);
-        const geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-
-        if (!geminiKey) {
-          throw new Error('Chave da API Gemini não configurada. Configure NEXT_PUBLIC_GEMINI_API_KEY no .env.local');
-        }
+        // Use server endpoint for Gemini to avoid exposing keys in the client
 
         const prompt = `INSTRUÇÃO CRÍTICA: Este documento contém UMA TABELA com MÚLTIPLAS LINHAS DE DADOS. Você DEVE extrair TODAS AS LINHAS, uma por uma.
 
@@ -241,8 +238,7 @@ EXEMPLO do formato esperado (retorne SÓ o JSON, sem texto adicional):
 
 🔥 LEMBRE-SE: Vá até o FINAL do documento e extraia TODAS as linhas da tabela!`;
 
-        const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${geminiKey}`,
+        const response = await fetch('/api/gemini',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

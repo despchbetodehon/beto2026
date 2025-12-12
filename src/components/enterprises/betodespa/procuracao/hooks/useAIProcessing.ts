@@ -44,12 +44,7 @@ export function useAIProcessing(): UseAIProcessingReturn {
   };
 
   const processImage = useCallback(async (file: File, section: string): Promise<AIExtractedData | null> => {
-    const geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-
-    if (!geminiKey) {
-      console.warn('Chave da API Gemini não configurada. Processamento de IA desabilitado.');
-      return null;
-    }
+    // Use the server-side endpoint to keep API keys secure
 
     setIsProcessing(true);
     setError(null);
@@ -68,8 +63,7 @@ export function useAIProcessing(): UseAIProcessingReturn {
 
       const prompt = getPromptForSection(section);
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
+      const response = await fetch('/api/gemini',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

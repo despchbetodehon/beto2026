@@ -51,7 +51,7 @@
     "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
     "lucide-react": "^0.216.0",
-    "next": "^15.0.0",
+    "next": "^16.0.10",
     "react": "18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
@@ -69,9 +69,11 @@
     "semver": "^7.6.3",
     "styled-components": "^6.0.8",
     "typescript": "^5.6.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.3",
     "@types/file-saver": "^2.0.7",
     "@types/leaflet": "^1.9.18",
     "@types/lodash": "^4.17.17",
@@ -80,7 +82,7 @@
     "@types/react-dom": "18.0.11",
     "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.14",
-    "eslint": "^9.0.0",
+    "eslint": "^8.57.1",
     "eslint-config-next": "16.0.10",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.7"

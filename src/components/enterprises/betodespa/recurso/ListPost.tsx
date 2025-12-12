@@ -991,13 +991,6 @@ const ListPost: React.FC<{
   // Função para processar dados da empresa usando IA
   const processEmpresaWithAI = async (file: File) => {
     setProcessingImage(true);
-    const geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-
-    if (!geminiKey) {
-      console.warn('Chave da API Gemini não configurada. Processamento de IA desabilitado.');
-      setProcessingImage(false);
-      return;
-    }
 
     try {
       const base64 = await new Promise<string>((resolve) => {
@@ -1011,7 +1004,7 @@ const ListPost: React.FC<{
 
       const prompt = `Extraia dados da empresa em JSON: {"nome": "", "razaoSocial": "", "nomeFantasia": "", "cnpj": "", "endereco": "", "cep": "", "bairro": "", "municipio": "", "estado": ""}`;
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
+      const response = await fetch('/api/gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1108,13 +1101,7 @@ const ListPost: React.FC<{
   // Função para processar dados de procurador usando IA
   const processSocioWithAI = async (file: File, procuradorNumber: number = 1) => {
     setProcessingImage(true);
-    const geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-
-    if (!geminiKey) {
-      console.warn('Chave da API Gemini não configurada. Processamento de IA desabilitado.');
-      setProcessingImage(false);
-      return;
-    }
+    // Use server endpoint '/api/gemini' to keep API key secure.
 
     try {
       const base64 = await new Promise<string>((resolve) => {
@@ -1128,7 +1115,7 @@ const ListPost: React.FC<{
 
       const prompt = `Extraia dados do procurador em JSON: {"nome": "", "cpf": "", "rg": "", "estadoCivil": "", "profissao": "", "endereco": "", "cep": "", "bairro": "", "municipio": "", "estado": ""}`;
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
+      const response = await fetch('/api/gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1191,13 +1178,7 @@ const ListPost: React.FC<{
   // Função para processar arquivos de contato com IA
   const processContactFileWithAI = async (file: File) => {
     setProcessingImage(true);
-    const geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-
-    if (!geminiKey) {
-      console.warn('Chave da API Gemini não configurada. Processamento de IA desabilitado.');
-      setProcessingImage(false);
-      return;
-    }
+    // Server endpoint /api/gemini will be used for AI requests; no client key required.
 
     try {
       const base64 = await new Promise<string>((resolve) => {
@@ -1211,7 +1192,7 @@ const ListPost: React.FC<{
 
       const prompt = `Extraia dados pessoais em JSON: {"nome": "", "cpf": "", "cnpj": "", "rg": "", "nacionalidade": "", "estadoCivil": "", "profissao": "", "endereco": "", "complemento": "", "bairro": "", "municipio": "", "estado": "", "cep": ""}`;
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
+      const response = await fetch('/api/gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1368,13 +1349,7 @@ const ListPost: React.FC<{
   // Função para processar arquivos de procurador da empresa com IA
   const processEmpresaSocioWithAI = async (file: File, procuradorIndex: number) => {
     setProcessingImage(true);
-    const geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-
-    if (!geminiKey) {
-      console.warn('Chave da API Gemini não configurada. Processamento de IA desabilitado.');
-      setProcessingImage(false);
-      return;
-    }
+    // Use server endpoint /api/gemini to keep API keys secure.
 
     try {
       const base64 = await new Promise<string>((resolve) => {
@@ -1388,7 +1363,7 @@ const ListPost: React.FC<{
 
       const prompt = `Extraia dados pessoais em JSON: {"nome": "", "cpf": "", "cnpj": "", "rg": "", "nacionalidade": "", "estadoCivil": "", "profissao": "", "endereco": "", "complemento": "", "bairro": "", "municipio": "", "estado": "", "cep": ""}`;
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
+      const response = await fetch('/api/gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1660,13 +1635,7 @@ const ListPost: React.FC<{
   // Função para processar imagens com IA
   const processImageWithAI = async (file: File, section: string) => {
     setProcessingImage(true);
-    const geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-
-    if (!geminiKey) {
-      console.warn('Chave da API Gemini não configurada. Processamento de IA desabilitado.');
-      setProcessingImage(false);
-      return;
-    }
+    // Use server endpoint /api/gemini to keep API keys secure.
 
     try {
       const base64 = await new Promise<string>((resolve) => {
@@ -1691,7 +1660,7 @@ const ListPost: React.FC<{
         prompt = `Extraia endereço do procurador em JSON: {"endereco": "", "bairro": "", "municipio": "", "cep": "", "estado": ""}`;
       }
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
+      const response = await fetch('/api/gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -1177,13 +1177,7 @@ const ListPost: React.FC<{ setItems: React.Dispatch<React.SetStateAction<Item[]>
   // Função para processar imagens com IA
   const processImageWithAI = async (file: File, section: string) => {
     setProcessingImage(true);
-    const geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-
-    if (!geminiKey) {
-      console.warn('Chave da API Gemini não configurada. Processamento de IA desabilitado.');
-      setProcessingImage(false);
-      return;
-    }
+    // Using server-side endpoint /api/gemini to keep API keys secure
 
     try {
       const base64 = await new Promise<string>((resolve) => {
@@ -1216,7 +1210,7 @@ const ListPost: React.FC<{ setItems: React.Dispatch<React.SetStateAction<Item[]>
         prompt = `Analyze this document (CPF, RG, CNH or CNPJ Card) and extract ALL data in JSON. If individual: name, CPF, RG. If legal entity (CNPJ Card): business name, trade name, CNPJ, address, main activity, cadastral status. Format: {"nome": "", "cpf": "", "cnpj": "", "razaoSocial": "", "nomeFantasia": "", "endereco": "", "atividadePrincipal": "", "situacao": ""}`;
       }
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
+      const response = await fetch('/api/gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1232,7 +1226,7 @@ const ListPost: React.FC<{ setItems: React.Dispatch<React.SetStateAction<Item[]>
             topP: 0.8,
             topK: 10
           }
-        })
+        }),
       });
 
       if (response.ok) {

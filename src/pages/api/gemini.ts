@@ -16,7 +16,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).json({ response: 'Chave da IA não configurada.', error: 'GEMINI_API_KEY ausente' });
     }
 
-    // 🔧 Coleções alvo
+    // If request body supplies custom contents, use it; otherwise use default
+    const { contents: suppliedContents, generationConfig: suppliedGenerationConfig, prompt: suppliedPrompt } = req.body || {};
+
+    // 🔧 Coleções alvo (default prompt uses db collections)
     const colecoes = [
       'leads',
       'clientes',
@@ -56,6 +59,17 @@ Com base nos dados reais abaixo, analise e retorne:
 DADOS (resumidos):
 ${JSON.stringify(allData, null, 2)}
 `;
+    // Use supplied contents/generationConfig if provided by the client
+    const contents = suppliedContents && Array.isArray(suppliedContents) 
+      ? suppliedContents 
+      : [{ parts: [{ text: suppliedPrompt || textoParaIA }] }];
+
+    const generationConfig = suppliedGenerationConfig || {
+      temperature: 0.85,
+      topK: 40,
+      topP: 0.9,
+      maxOutputTokens: 2048,
+    };
 
     const geminiRes = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
@@ -66,13 +80,8 @@ ${JSON.stringify(allData, null, 2)}
           'x-goog-api-key': apiKey
         },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: textoParaIA }] }],
-          generationConfig: {
-            temperature: 0.85,
-            topK: 40,
-            topP: 0.9,
-            maxOutputTokens: 2048,
-          }
+          contents,
+          generationConfig
         }),
       }
     );
