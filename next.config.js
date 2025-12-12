@@ -5,7 +5,7 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   generateEtags: false,
-  swcMinify: true,
+  // swcMinify removed as deprecated in Next 16; Turbopack handles optimization
 
   allowedDevOrigins: [
     'localhost',
@@ -27,11 +27,11 @@ const nextConfig = {
 
   images: {
     unoptimized: true,
-    domains: [
-      'source.unsplash.com',
-      'images.unsplash.com',
-      'lh3.googleusercontent.com',
-      'firebasestorage.googleapis.com'
+    remotePatterns: [
+      { protocol: 'https', hostname: 'source.unsplash.com' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
+      { protocol: 'https', hostname: 'firebasestorage.googleapis.com' }
     ]
   },
 

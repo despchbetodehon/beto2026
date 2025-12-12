@@ -36,7 +36,7 @@ import { Alert } from '@mui/lab';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 import Pagina from '@/components/template/Pagina';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -395,7 +395,7 @@ EXEMPLO do formato esperado (retorne SÓ o JSON, sem texto adicional):
     ));
   };
 
-  const downloadExcel = () => {
+  const downloadExcel = async () => {
     // Filtrar colunas que têm pelo menos um valor preenchido
     const filteredColumns = columns.filter(col => {
       return extractedData.some(row => row[col.id] && row[col.id].trim() !== '');
@@ -408,10 +408,21 @@ EXEMPLO do formato esperado (retorne SÓ o JSON, sem texto adicional):
       )
     ];
 
-    const ws = XLSX.utils.aoa_to_sheet(worksheetData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Dados Extraídos');
-    XLSX.writeFile(wb, `planilha_despachante_${new Date().getTime()}.xlsx`);
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Dados Extraídos');
+
+    worksheet.addRows(worksheetData);
+
+    const buf = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `planilha_despachante_${new Date().getTime()}.xlsx`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
   };
 
   const printPreview = () => {
